@@ -1,5 +1,7 @@
 package sg.com.ebates.weather.weathermanagement.core;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,7 +24,7 @@ public class WeatherManagement extends Service implements IWeatherManagement {
 
     public WeatherManagement(IContainer container) {
         super(container);
-        this.log = this.getService(ILogManagement.NAME);
+        this.log = this.getService(ILogManagement.class);
     }
 
     @Override
@@ -31,9 +33,10 @@ public class WeatherManagement extends Service implements IWeatherManagement {
     }
 
     @Override
-    public IWeather getWeather(City city) {
+    public IWeather getWeather(City city) throws JSONException {
         IWeather weather = this.weatherCityMap.get(city);
-        if (null == weather) {
+        if (null == weather || weather.isExpired()) {
+            this.weatherCityMap.remove(city);
             return this.query(city);
         }
         return weather;
@@ -41,13 +44,14 @@ public class WeatherManagement extends Service implements IWeatherManagement {
 
     @Override
     public void bulkDownloading() {
-
+        //TODO
     }
 
-    private IWeather query(City city) {
+    private IWeather query(City city) throws JSONException {
         this.log.i("Start to query weather for city: " + city.toString());
-        IWeatherProvider provider = this.getService(IWeatherProvider.NAME);
+        IWeatherProvider provider = this.getService(IWeatherProvider.class);
         IWeather weather = provider.query(city.getId());
+        weather.setCity(city);
         this.insertWeather(weather);
         return weather;
     }

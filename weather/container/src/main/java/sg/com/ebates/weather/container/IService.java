@@ -9,9 +9,9 @@ public interface IService {
 
     /**
      * get service in container
-     * @param name
+     * @param key
      * @param <T>
      * @return
      */
-    <T> T getService(String name);
+    <T> T getService(Object key);
 }

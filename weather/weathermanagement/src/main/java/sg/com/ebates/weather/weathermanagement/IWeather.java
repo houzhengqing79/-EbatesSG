@@ -1,8 +1,6 @@
 package sg.com.ebates.weather.weathermanagement;
 
 import sg.com.ebates.weather.weathermanagement.objs.City;
-import sg.com.ebates.weather.weathermanagement.objs.WeatherDescription;
-import sg.com.ebates.weather.weathermanagement.objs.WeatherMain;
 
 public interface IWeather {
 
@@ -11,6 +9,12 @@ public interface IWeather {
      * @return
      */
     int getId();
+
+    /**
+     * set mapping city
+     * @param city
+     */
+    void setCity(City city);
 
     /**
      * city of current weather for
@@ -28,11 +32,13 @@ public interface IWeather {
      * get Weather Main object
      * @return
      */
-    WeatherMain getWeatherMain();
+    IWeatherMain getWeatherMain();
 
     /**
      * get weather description object
      * @return
      */
-    WeatherDescription getWeatherDescription();
+    IWeatherDescription getWeatherDescription();
+
+    boolean isExpired();
 }
