@@ -5,15 +5,22 @@ public class City {
     private String name;
     private String country;
     private Coordinate coordinate;
+    private String fullname;
 
     private City(int id, String name, String country, Coordinate coordinate) {
         this.id = id;
         this.name = name;
         this.country = country;
         this.coordinate = coordinate;
+        this.fullname = this.buildFullname();
     }
+
     public City(int id, String name, String country, double lon, double lat) {
         this(id, name, country, new Coordinate(lon, lat));
+    }
+
+    private String buildFullname() {
+        return String.format("%s,%s", this.name, this.country);
     }
 
     public int getId() {
@@ -22,6 +29,10 @@ public class City {
 
     public String getName() {
         return name;
+    }
+
+    public String getFullname() {
+        return this.fullname;
     }
 
     public String getCountry() {
@@ -34,6 +45,6 @@ public class City {
 
     @Override
     public String toString(){
-        return "City, id: " + id + ", name: " + name + ", country: " + this.country;
+        return this.getFullname();
     }
 }

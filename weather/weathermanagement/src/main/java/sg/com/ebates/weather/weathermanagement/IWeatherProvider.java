@@ -1,11 +1,12 @@
 package sg.com.ebates.weather.weathermanagement;
 
+import org.json.JSONException;
+
 public interface IWeatherProvider {
-    String NAME = "WEATHER_PROVIDER";
     /**
      * query weather by city id
      * @param cityId
      * @return
      */
-    IWeather query(int cityId);
+    IWeather query(int cityId) throws JSONException;
 }

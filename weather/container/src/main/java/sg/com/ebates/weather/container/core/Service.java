@@ -16,7 +16,7 @@ public class Service implements IService {
     }
 
     @Override
-    public <T> T getService(String name) {
-        return this.getContainer().getService(name);
+    public <T> T getService(Object key) {
+        return this.getContainer().getService(key);
     }
 }

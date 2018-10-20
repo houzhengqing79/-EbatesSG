@@ -14,4 +14,9 @@ public class LogManagement implements ILogManagement {
     public void i(String message) {
         Log.i("Weather", message);
     }
+
+    @Override
+    public void e(String message) {
+        Log.e("weather", message);
+    }
 }

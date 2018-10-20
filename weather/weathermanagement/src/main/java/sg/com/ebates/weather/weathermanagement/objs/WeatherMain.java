@@ -1,12 +1,21 @@
 package sg.com.ebates.weather.weathermanagement.objs;
 
-public class WeatherMain {
+public class WeatherMain implements sg.com.ebates.weather.weathermanagement.IWeatherMain {
     private float temp;
     private int pressure;
     private int humidity;
     private float tempMin;
     private float tempMax;
 
+    public WeatherMain(float temp, int pressure, int humidity, float tempMin, float tempMax) {
+        this.temp = temp;
+        this.pressure = pressure;
+        this.humidity = humidity;
+        this.tempMin = tempMin;
+        this.tempMax = tempMax;
+    }
+
+    @Override
     public float getTemp() {
         return temp;
     }
@@ -15,6 +24,7 @@ public class WeatherMain {
         this.temp = temp;
     }
 
+    @Override
     public int getPressure() {
         return pressure;
     }
@@ -23,6 +33,7 @@ public class WeatherMain {
         this.pressure = pressure;
     }
 
+    @Override
     public int getHumidity() {
         return humidity;
     }
@@ -31,6 +42,7 @@ public class WeatherMain {
         this.humidity = humidity;
     }
 
+    @Override
     public float getTempMin() {
         return tempMin;
     }
@@ -39,6 +51,7 @@ public class WeatherMain {
         this.tempMin = tempMin;
     }
 
+    @Override
     public float getTempMax() {
         return tempMax;
     }

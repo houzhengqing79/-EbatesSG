@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,10 +19,10 @@ public class CityManagement implements ICityManagement {
     private String cityFilePath = "/META-INF/city/city.list.json";
     List<City> cities = new ArrayList<>();
     Map<Integer, City> cityIdMap = new HashMap<>();
-    Map<String, List<City>> cityNameMap = new HashMap<>();
+    Map<String, City> cityNameMap = new HashMap<>();
 
     @Override
-    public void initialize() throws JSONException {
+    public void initialize() throws JSONException, IOException {
         String cityData = ResourceHelper.readResource(CityManagement.class, cityFilePath);
         JSONArray cityList = new JSONArray(cityData);
 
@@ -44,26 +45,26 @@ public class CityManagement implements ICityManagement {
     }
 
     @Override
-    public City getCity(int id) {
-        return this.cityIdMap.get(id);
+    public List<String> getCityFullnames() {
+        return new ArrayList<>(this.cityNameMap.keySet());
     }
 
     @Override
-    public List<City> getCities(String name) {
-        return Collections.unmodifiableList(this.cityNameMap.get(name));
+    public City getCity(String fullname) {
+        return this.cityNameMap.get(fullname);
+    }
+
+    @Override
+    public City getCity(int id) {
+        return this.cityIdMap.get(id);
     }
 
     private void insertCity(City city) {
         if (this.cityIdMap.containsKey(city.getId())) {
             return;
         }
-        List<City> nameCities = this.cityNameMap.get(city.getName());
-        if (null == nameCities) {
-            nameCities = new ArrayList<City>();
-            this.cityNameMap.put(city.getName(), nameCities);
-        }
-        nameCities.add(city);
 
+        this.cityNameMap.put(city.getFullname(), city);
         this.cities.add(city);
         this.cityIdMap.put(city.getId(), city);
     }
