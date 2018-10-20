@@ -2,6 +2,7 @@ package sg.com.ebates.weather.weathermanagement;
 
 import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.List;
 
 import sg.com.ebates.weather.weathermanagement.objs.City;
@@ -19,7 +20,7 @@ public interface IWeatherManagement {
      * @param city
      * @return
      */
-    IWeather getWeather(City city) throws JSONException;
+    IWeather getWeather(City city) throws JSONException, IOException;
 
     /**
      * bulkDownloading
