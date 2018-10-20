@@ -27,7 +27,7 @@ public class OpenWeatherMapProvider extends Service implements IWeatherProvider 
     }
 
     @Override
-    public IWeather query(int cityId) throws JSONException {
+    public IWeather query(int cityId) throws JSONException, IOException {
         String url = this.buildQueryUrl(cityId);
         String data = this.get(url);
         Weather.IWeatherBuilder builder = Weather.getBuilder();
@@ -38,22 +38,21 @@ public class OpenWeatherMapProvider extends Service implements IWeatherProvider 
         return String.format(OPEN_WEATHER_MAP_URL_CITY, String.valueOf(cityId));
     }
 
-    private String get(String httpUrl) {
+    private String get(String httpUrl) throws IOException {
         HttpURLConnection con = null;
+        this.log.i("will do query on: " + httpUrl);
         try {
-            this.log.i("will do query on: " + httpUrl);
             URL url = new URL(httpUrl);
             con = (HttpURLConnection) url.openConnection();
             return this.convertStreamToString(con.getInputStream());
-        } catch (MalformedURLException e) {
-            this.log.e(e.getMessage());
-        } catch (IOException e) {
-            this.log.e(e.getMessage());
+        }finally {
+            if (null != con) {
+                con.disconnect();
+            }
         }
-        return "";
     }
 
-    private String convertStreamToString(InputStream is) {
+    private String convertStreamToString(InputStream is) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
 
@@ -64,11 +63,13 @@ public class OpenWeatherMapProvider extends Service implements IWeatherProvider 
             }
         } catch (IOException e) {
             this.log.e(e.getMessage());
+            throw e;
         } finally {
             try {
                 is.close();
             } catch (IOException e) {
                 this.log.e(e.getMessage());
+                throw e;
             }
         }
         return sb.toString();

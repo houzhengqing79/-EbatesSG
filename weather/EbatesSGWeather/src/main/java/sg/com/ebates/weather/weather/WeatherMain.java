@@ -8,9 +8,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,7 @@ import sg.com.ebates.weather.weathermanagement.IWeather;
 import sg.com.ebates.weather.weathermanagement.IWeatherManagement;
 import sg.com.ebates.weather.weathermanagement.IWeatherProvider;
 import sg.com.ebates.weather.weathermanagement.core.CityManagement;
+import sg.com.ebates.weather.weathermanagement.core.Weather;
 import sg.com.ebates.weather.weathermanagement.core.WeatherManagement;
 import sg.com.ebates.weather.weathermanagement.objs.City;
 import sg.com.ebates.weather.weathermanagement.providers.openweathermap.OpenWeatherMapProvider;
@@ -84,6 +87,10 @@ public class WeatherMain extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     WeatherMain.this.logManagement.e("Add weather failed: " + e.getLocalizedMessage());
+                    WeatherMain.this.showToastMessage("Weather query failed: " + e.getLocalizedMessage());
+                } catch (IOException e) {
+                    WeatherMain.this.logManagement.e("Add weather failed: " + e.getLocalizedMessage());
+                    WeatherMain.this.showToastMessage("Weather query failed: " + e.getLocalizedMessage());
                 }
             }
         }).start();
@@ -105,6 +112,7 @@ public class WeatherMain extends AppCompatActivity {
                     WeatherMain.this.refreshCityAutoCompleteTextView();
                 } catch (Exception e) {
                     WeatherMain.this.logManagement.e("Initializing history failed: " + e.getLocalizedMessage());
+                    WeatherMain.this.showToastMessage("Initializing failed: " + e.getLocalizedMessage());
                 }
             }
         }).start();
@@ -138,7 +146,7 @@ public class WeatherMain extends AppCompatActivity {
         });
     }
 
-    private List<IWeather> buildWeatherByCityIds(List<Integer> cityIds) throws JSONException {
+    private List<IWeather> buildWeatherByCityIds(List<Integer> cityIds) throws JSONException, IOException {
         List<IWeather> weathers = new ArrayList<>();
         for (Integer cityId: cityIds) {
             City city = this.cityManagement.getCity(cityId);
@@ -163,5 +171,14 @@ public class WeatherMain extends AppCompatActivity {
         container.addService(IWeatherManagement.class, this.weatherManagement);
 
         this.historyManagement = new HistoryManagement(this);
+    }
+
+    private void showToastMessage(final String message) {
+        WeatherMain.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(WeatherMain.this, message, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
