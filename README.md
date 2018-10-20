@@ -5,7 +5,7 @@
 - support search by city name
 - support search history, limit 10
 
-## dependency
+## Dependency
 - Android Studio: https://developer.android.com/studio/
 - gradle https://gradle.org/
 
