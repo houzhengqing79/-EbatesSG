@@ -64,7 +64,7 @@ public class Weather implements IWeather {
 
     @Override
     public String toString() {
-        return String.format("City: %s. Temp: %s. Weather: %s, %s.", this.city.toString(), this.weatherMain.getTemp(),
+        return String.format("City: %s. \nTemp: %s. \nWeather: %s, %s.", this.city.toString(), this.weatherMain.getTemp(),
                 this.weatherDescription.getMainDescription(), this.weatherDescription.getDescription());
     }
 
